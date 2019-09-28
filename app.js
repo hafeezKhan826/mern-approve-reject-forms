@@ -16,11 +16,11 @@ var jwt = require('jsonwebtoken');
 
 var passport = require('passport');
 
-passport.serializeUser(function(user, cb) {
+passport.serializeUser(function (user, cb) {
     cb(null, user);
 });
 
-passport.deserializeUser(function(obj, cb) {
+passport.deserializeUser(function (obj, cb) {
     cb(null, obj);
 });
 var app = express();
@@ -79,14 +79,14 @@ app.set('view engine', 'jade');
 app.use(cors({
     origin: '*',
     withCredentials: false,
-    allowedHeaders: ['Content-Type', 'userid', 'Authorization', 'X-Requested-With', 'X-Content-Type-Options', 'X-Frame-Options', 'Accept', 'Origin']
+    allowedHeaders: ['Content-Type', 'userid', 'token', 'Authorization', 'X- Requested - With', 'X- Content - Type - Options', 'X- Frame - Options', 'Accept', 'Origin']
 }));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, './client')));
 
 app.use('/', indexRouter);
 app.use('/users', usersController);
@@ -95,12 +95,12 @@ app.use('/form', formController);
 app.use('/auth', authController);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};

@@ -1,4 +1,27 @@
 const { User } = require('../models/user');
+const jwt = require('jsonwebtoken');
+const secret = 'gladiator';
+
+exports.verifyToken = async (req, res, next) => {
+    const { userid, token } = req.headers;
+    console.log({ token }, req.headers);
+    jwt.verify(token, secret, (err, decoded) => {
+        console.log({ err });
+        console.log({ decoded });
+    })
+    const user = await User.findById(userid);
+    if (user) {
+        console.log({ user });
+        next();
+    } else {
+        res.send({
+            status: 'error',
+            message: 'unauthorized'
+        })
+    }
+
+}
+
 
 exports.validateUser = async (req, res, next) => {
     const { userid } = req.headers;

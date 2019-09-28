@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Department } = require('../models/department');
+const { validateUser, verifyToken } = require('../middlewares/validate');
 
 router.get('/', (req, res, next) => {
     res.send('department routes triggered');
@@ -41,7 +42,7 @@ router.post('/add-department', async (req, res, next) => {
     }
 });
 
-router.get('/all-departments', async (req, res, next) => {
+router.get('/all-departments', verifyToken, async (req, res, next) => {
     const departments = await Department.find({}, { name: 1, departmentId: 1, _id: 0 });
     const response = {
         status: 'success',

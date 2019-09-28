@@ -10,7 +10,7 @@ const departmentSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    description: { type: String, required: true },
+    description: { type: String },
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 });
 const Department = mongoose.model('departments', departmentSchema);

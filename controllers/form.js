@@ -46,33 +46,36 @@ router.post('/submit-form', validateUser, async (req, res, next) => {
     }
 });
 
-router.post('/accept-reject', validateManager, async (req, res, next) => {
+router.post('/accept-reject', async (req, res, next) => {
     const { formId, acceptStatus } = req.body;
     const { userid } = req.headers;
     console.log(formId, userid, acceptStatus);
-    res.send('Howdy Modi')
-    /* Form
-        .findById(formId)
-        .then(result => {
-            console.log(result.userAssignedTo === userid, result.userAssignedTo, userid);
-            if (result.userAssignedTo === userid) {
-                result.updatedAt = Date.now();
-                result.status = acceptStatus;
-                // result.save();
-                const response = {
-                    status: 'success',
-                    message: 'Approved successfully'
+    const formFound = await Form.findById(formId);
+    if (formFound) {
+        Form
+            .findOneAndUpdate({ '_id': formId })
+            .then(result => {
+                console.log({ result });
+                if (result.userAssignedTo == userid) {
+                    result.updatedAt = Date.now();
+                    result.status = acceptStatus;
+                    // result.save();
+                    result.save();
+                    const response = {
+                        status: 'success',
+                        message: 'Approved successfully'
+                    }
+                    res.send(response)
+                } else {
+                    const response = {
+                        status: 'error',
+                        message: 'Assigned to different manager'
+                    }
+                    res.send(response)
                 }
-                res.send(response)
-            } else {
-                const response = {
-                    status: 'error',
-                    message: 'Assigned to different manager'
-                }
-                res.send(response)
-            }
-        })
-        .catch((err) => { res }); */
+            })
+            .catch((err) => { res });
+    }
 
     /* if (isValid(formObj)) {
         console.log('Valid values: ', message, departmentAssignedTo, userAssignedTo);

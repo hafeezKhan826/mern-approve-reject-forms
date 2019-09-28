@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../models/user');
+const { Department } = require('../models/department');
 const { validateUser } = require('../middlewares/validate');
 
 router.get('/', function (req, res, next) {
@@ -14,11 +15,19 @@ router.post('/add-user', async (req, res, next) => {
         const user = new User(userObj);
         user.password = user.generateHash(req.body.password);
         await user.save();
-        const response = {
-            status: 'success',
-            message: 'User registered Successfully',
-        }
-        res.send(response);
+
+        Department.updateOne({ departmentId: user.departmentId }, {
+            $push: {
+                members: user._id
+            }
+        }, (err, result) => {
+            const response = {
+                status: 'success',
+                message: 'User registered Successfully',
+            }
+            res.send(response);
+        })
+
     } else {
         const response = {
             status: 'error',

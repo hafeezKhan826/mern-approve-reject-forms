@@ -7,16 +7,21 @@ var jwt = require('jsonwebtoken');
 const secret = 'gladiator';
 
 router.post('/login', async (req, res, next) => {
-    const token = req.body;
-    jwt.verify(secret, )
     const { email, password } = req.body;
     try {
-        const user = User.findOne({ email })
+        const user = await User.findOne({ email }, { password: 0 })
+        const token = jwt.sign({
+            user,
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 60)
+        }, secret)
         if (user) {
-            res.send(user);
+            const response = {
+                status: 'success',
+                user, token
+            }
+            res.send(response);
         }
     } catch (error) {
-        console.log();
         res.send({ error })
     }
 })
