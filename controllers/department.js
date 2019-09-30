@@ -42,7 +42,7 @@ router.post('/add-department', async (req, res, next) => {
     }
 });
 
-router.get('/all-departments', verifyToken, async (req, res, next) => {
+router.get('/all-departments',  async (req, res, next) => {
     const departments = await Department.find({}, { name: 1, departmentId: 1, _id: 0 });
     const response = {
         status: 'success',

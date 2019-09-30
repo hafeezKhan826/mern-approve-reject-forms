@@ -22,7 +22,6 @@ router.post('/submit-form', validateUser, async (req, res, next) => {
         createdBy: userid,
         status: 'pending'
     };
-    console.log({ formObj }, isValid(formObj));
     if (isValid(formObj)) {
         const form = new Form(formObj);
         const assignedUser = await User.findById(form.userAssignedTo);
@@ -100,6 +99,28 @@ router.post('/accept-reject', async (req, res, next) => {
 router.get('/get-all-forms', async (req, res, next) => {
     try {
         const forms = await Form.find({}, {
+            createdBy: 0,
+            departmentAssignedTo: 0,
+            assignedDepartment: 0
+        });
+        const response = {
+            status: 'success',
+            forms
+        }
+        res.send(response)
+    } catch (err) {
+        const response = {
+            status: 'error'
+        }
+        res.send(response)
+    }
+
+})
+
+router.get('/get-all-dept-forms', async (req, res, next) => {
+    const { departmentId } = req.query;
+    try {
+        const forms = await Form.find({ departmentId }, {
             createdBy: 0,
             departmentAssignedTo: 0,
             assignedDepartment: 0

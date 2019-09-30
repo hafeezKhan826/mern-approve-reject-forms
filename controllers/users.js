@@ -12,22 +12,32 @@ router.post('/add-user', async (req, res, next) => {
     const { fullName, departmentId, email, password } = req.body;
     const userObj = { fullName, departmentId, email, password }
     if (userObj && isValid(userObj)) {
-        const user = new User(userObj);
-        user.password = user.generateHash(req.body.password);
-        await user.save();
 
-        Department.updateOne({ departmentId: user.departmentId }, {
-            $push: {
-                members: user._id
-            }
-        }, (err, result) => {
+        const userFound = await User.findOne({ email });
+        if (!userFound) {
+            const user = new User(userObj);
+            user.password = user.generateHash(req.body.password);
+            await user.save();
+
+            Department.updateOne({ departmentId: user.departmentId }, {
+                $push: {
+                    members: user._id
+                }
+            }, (err, result) => {
+                const response = {
+                    user,
+                    status: 'success',
+                    message: 'User registered Successfully',
+                }
+                res.send(response);
+            })
+        } else {
             const response = {
-                status: 'success',
-                message: 'User registered Successfully',
+                status: 'error',
+                message: 'User with email id is already registered'
             }
-            res.send(response);
-        })
-
+            res.send(response)
+        }
     } else {
         const response = {
             status: 'error',
@@ -58,6 +68,29 @@ router.post('/edit-user', validateUser, async (req, res, next) => {
     }
 });
 
+router.get('/get-users-details', validateUser, async (req, res, next) => {
+    try {
+        const { userid } = req.headers;
+        const user = await User.findById(userid);
+        const userDept = await Department.findOne({ departmentId: user.departmentId });
+        user.departmentName = userDept.name;
+        if (user) {
+            const response = {
+                status: 'success',
+                user
+            }
+            res.send(response)
+        }
+    } catch (error) {
+        const response = {
+            status: 'error',
+            error
+        }
+
+        res.send(response)
+    }
+});
+
 router.get('/get-all-users', async (req, res, next) => {
     const users = await User.find({});
     const response = {
@@ -77,6 +110,7 @@ router.get('/get-users-from-dept', async (req, res, next) => {
     }
     res.send(response);
 })
+
 
 isValid = (userObj) => Object.values(userObj).every(val => val !== '')
 

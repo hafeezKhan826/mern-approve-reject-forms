@@ -8,6 +8,7 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     departmentId: { type: String, required: true },
+    departmentName: { type: String },
     email: {
         type: String,
         required: true,
@@ -16,17 +17,18 @@ const UserSchema = mongoose.Schema({
             unique: true
         }
     },
+
     password: {
         type: String,
         required: true,
         minlength: 6
     },
 });
-UserSchema.methods.generateHash = function(password) {
+UserSchema.methods.generateHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-UserSchema.methods.compareHash = function(password) {
+UserSchema.methods.compareHash = function (password) {
     return (bcrypt.compareSync(password, this.password));
 };
 const User = mongoose.model('users', UserSchema);

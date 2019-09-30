@@ -20,6 +20,12 @@ router.post('/login', async (req, res, next) => {
                 user, token
             }
             res.send(response);
+        } else {
+            const response = {
+                status: 'error',
+                message: 'User not found'
+            }
+            res.send(response);
         }
     } catch (error) {
         res.send({ error })
