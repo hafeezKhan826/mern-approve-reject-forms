@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Form } = require('../models/form');
 const { validateUser, validateApplicant, validateManager } = require('../middlewares/validate');
-const { Department } = require('../models/department');
+// const { Department } = require('../models/department');
 const { User } = require('../models/user');
 
 router.get('/', (req, res, next) => {
@@ -12,8 +12,7 @@ router.get('/', (req, res, next) => {
 router.post('/submit-form', validateUser, async (req, res, next) => {
     const { message, departmentId, userAssignedTo, title } = req.body;
     const { userid } = req.headers;
-    console.log('Aslpl: ', message, departmentId, userAssignedTo, title);
-
+    
     const formObj = {
         title,
         message,
@@ -48,32 +47,54 @@ router.post('/submit-form', validateUser, async (req, res, next) => {
 router.post('/accept-reject', async (req, res, next) => {
     const { formId, acceptStatus } = req.body;
     const { userid } = req.headers;
-    console.log(formId, userid, acceptStatus);
     const formFound = await Form.findById(formId);
     if (formFound) {
-        Form
-            .findOneAndUpdate({ '_id': formId })
-            .then(result => {
-                console.log({ result });
-                if (result.userAssignedTo == userid) {
-                    result.updatedAt = Date.now();
-                    result.status = acceptStatus;
-                    // result.save();
-                    result.save();
-                    const response = {
-                        status: 'success',
-                        message: 'Approved successfully'
-                    }
-                    res.send(response)
-                } else {
-                    const response = {
-                        status: 'error',
-                        message: 'Assigned to different manager'
-                    }
-                    res.send(response)
-                }
+
+        if (formFound.userAssignedTo == userid) {
+            await formFound.update({
+                updatedAt: Date.now(),
+                status: acceptStatus
             })
-            .catch((err) => { res });
+            formFound.save();
+            const response = {
+                status: 'success',
+                message: 'Approved successfully'
+            }
+            res.send(response)
+        } else {
+            const response = {
+                status: 'error',
+                message: 'Assigned to different manager'
+            }
+            res.send(response)
+        }
+
+        /*        Form
+                   .updateOne({ _id: formFound.formId }, { useFindAndModify: false })
+                   .then(result => {
+                       console.log({ result });
+                       if (result.userAssignedTo == userid) {
+                           result.updatedAt = Date.now();
+                           result.status = acceptStatus;
+                           // result.save();
+                           result.save();
+                       } else {
+                           const response = {
+                               status: 'error',
+                               message: 'Assigned to different manager'
+                           }
+                           res.send(response)
+                       }
+                   })
+                   .catch((err) => { res }); */
+    } else {
+
+        const response = {
+            status: 'error',
+            formFound,
+            message: 'something went wrong'
+        }
+        res.send(response)
     }
 
     /* if (isValid(formObj)) {
