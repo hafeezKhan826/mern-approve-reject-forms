@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/hafeezKhan826/mern-approve-reject-forms/precache-manifest.f9040724192446ed014315e2d9fec27d.js"
+  "/hafeezKhan826/mern-approve-reject-forms/precache-manifest.fcb56adfdac9d835e5beca90ee33dcf4.js"
 );
 
 self.addEventListener('message', (event) => {

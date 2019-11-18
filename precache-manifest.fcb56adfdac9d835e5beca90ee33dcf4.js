@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "533459d787b6bac3b6f690b0f7a10727",
+    "revision": "a570d0baa1c0d40d0c20065fd064722d",
     "url": "/hafeezKhan826/mern-approve-reject-forms/index.html"
   },
   {
-    "revision": "7e20f97b2ffd15147c69",
-    "url": "/hafeezKhan826/mern-approve-reject-forms/static/css/4.f1d95083.chunk.css"
+    "revision": "af3eb8f7b9b594afe19d",
+    "url": "/hafeezKhan826/mern-approve-reject-forms/static/css/4.51fdc015.chunk.css"
   },
   {
     "revision": "3b3605ab716cc94bc766",
@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/hafeezKhan826/mern-approve-reject-forms/static/js/3.e8a445f1.chunk.js"
   },
   {
-    "revision": "7e20f97b2ffd15147c69",
+    "revision": "af3eb8f7b9b594afe19d",
     "url": "/hafeezKhan826/mern-approve-reject-forms/static/js/4.5d4f306b.chunk.js"
   },
   {
