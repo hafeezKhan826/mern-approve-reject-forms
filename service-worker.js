@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "github.com/hafeezKhan826/mern-approve-reject-forms/precache-manifest.3d6199ce74a4b72b4fa29b507a607457.js"
+  "/hafeezKhan826/mern-approve-reject-forms/precache-manifest.f9040724192446ed014315e2d9fec27d.js"
 );
 
 self.addEventListener('message', (event) => {
@@ -33,7 +33,7 @@ workbox.core.clientsClaim();
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("github.com/hafeezKhan826/mern-approve-reject-forms/index.html"), {
+workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("/hafeezKhan826/mern-approve-reject-forms/index.html"), {
   
   blacklist: [/^\/_/,/\/[^\/?]+\.[^\/]+$/],
 });
